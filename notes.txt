@@ -1,0 +1,4 @@
+user needs to install aws cli
+install boto3
+install tabulate
+run python venv using "source .venv/Scripts/activate"
