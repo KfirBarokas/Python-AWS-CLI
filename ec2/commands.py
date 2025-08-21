@@ -37,6 +37,21 @@ def register_ec2_commands(subparsers):
 
     create.set_defaults(func=operations.create_instance_cli)
 
+    # start
+    start = ec2_subparsers.add_parser("start", help="Start an EC2 instance")
+    start.add_argument("instance_id", help="ID of an instance to top", type=str)
+    start.set_defaults(func=operations.start_instance_cli)
+
+    # stop
+    stop = ec2_subparsers.add_parser("stop", help="Stop an EC2 instance")
+    stop.add_argument("instance_id", help="ID of an instance to top", type=str)
+    stop.set_defaults(func=operations.stop_instance_cli)
+
+    # terminate
+    terminate = ec2_subparsers.add_parser("terminate", help="Terminate an EC2 instance")
+    terminate.add_argument("instance_id", help="ID of an instance to top", type=str)
+    terminate.set_defaults(func=operations.terminate_instance_cli)
+
     # list
-    list_cli = ec2_subparsers.add_parser("list", help="List ec2 instances")
-    list_cli.set_defaults(func=operations.list_instances_cli)
+    list_instances = ec2_subparsers.add_parser("list", help="List ec2 instances")
+    list_instances.set_defaults(func=operations.list_instances_cli)

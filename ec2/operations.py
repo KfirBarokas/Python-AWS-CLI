@@ -84,43 +84,62 @@ def check_instance_exists(instance_id):
         raise  # re-raise unexpected errors
 
 
-def start_instance_with_tags(instance_id, tags):
+def instance_exists_and_has_tags(instance_id, tags):
     if check_instance_exists(instance_id) == False:
         raise NoInstanceFoundById(instance_id)
 
-    if get_running_instance_count_by_tags(tags) >= MAX_RUNNING_INSTANCES:
-        raise RunningInstanceCountLimitReached(MAX_RUNNING_INSTANCES)
+    instance = ec2_resource.Instance(instance_id)
+    instance_tags = instance.tags or []
+
+    if not instance_tags_match_tags(instance_tags, tags):
+        raise InstanceNotMatchingTags(tags)
+
+    return instance
+
+
+def start_instance_cli(args):
+    start_instance_with_tags(args.instance_id, RESOURCE_DEFAULT_TAGS)
+
+
+def start_instance_with_tags(instance_id, tags):
+    instance = instance_exists_and_has_tags(instance_id, tags)
 
     if instance.state["Name"] == INSTANCE_STATE_RUNNING:
         raise InstanceAlreadyInState(INSTANCE_STATE_RUNNING)
 
-    instance = ec2_resource.Instance(instance_id)
+    if get_running_instance_count_by_tags(tags) >= MAX_RUNNING_INSTANCES:
+        raise RunningInstanceCountLimitReached(MAX_RUNNING_INSTANCES)
+
     instance.start()
     instance.wait_until_running()
     return instance.state
 
 
+def stop_instance_cli(args):
+    stop_instance_with_tags(args.instance_id, RESOURCE_DEFAULT_TAGS)
+
+
 def stop_instance_with_tags(instance_id, tags):
-    if check_instance_exists(instance_id) == False:
-        raise NoInstanceFoundById(instance_id)
+    instance = instance_exists_and_has_tags(instance_id, tags)
 
     if instance.state["Name"] == INSTANCE_STATE_STOPPED:
         raise InstanceAlreadyInState(INSTANCE_STATE_STOPPED)
 
-    instance = ec2_resource.Instance(instance_id)
     instance.stop()
     instance.wait_until_stopped()
     return instance.state
 
 
+def terminate_instance_cli(args):
+    terminate_instance_with_tags(args.instance_id)
+
+
 def terminate_instance_with_tags(instance_id, tags):
-    if check_instance_exists(instance_id) == False:
-        raise NoInstanceFoundById(instance_id)
+    instance = instance_exists_and_has_tags(instance_id, tags)
 
     if instance.state["Name"] == INSTANCE_STATE_TERMINATED:
         raise InstanceAlreadyInState(INSTANCE_STATE_TERMINATED)
 
-    instance = ec2_resource.Instance(instance_id)
     instance.terminate()
     instance.wait_until_terminated()
     return instance.state
@@ -141,30 +160,33 @@ def instance_tags_match_tags(instance_tags, tags_to_match):
 
 
 def list_instances_cli(args):
-    print_instances_table(list_instances_by_tags(RESOURCE_DEFAULT_TAGS))
+    print_instances_table(get_all_instances_by_tags(RESOURCE_DEFAULT_TAGS))
 
 
-def list_instances_by_tags(tags):
+def get_all_instances_by_tags(tags):
     instances = []
-    response = ec2_client.describe_instances()
+
+    filters = []
+    for tag in tags:
+        filters.append({"Name": f"tag:{tag['Key']}", "Values": [tag["Value"]]})
+
+    response = ec2_client.describe_instances(Filters=filters)
 
     for reservation in response["Reservations"]:
         for instance in reservation["Instances"]:
+            instance_id = instance["InstanceId"]
+            instance_type = instance["InstanceType"]
+            instance_state = instance["State"]["Name"]
 
-            if instance_tags_match_tags(instance["Tags"], tags):
-                instance_id = instance["InstanceId"]
-                instance_type = instance["InstanceType"]
-                instance_state = instance["State"]["Name"]
-
-                instance_public_ip = instance.get("PublicIpAddress", "N/A")
-                instances.append(
-                    {
-                        "instance_id": instance_id,
-                        "instance_type": instance_type,
-                        "instance_state": instance_state,
-                        "instance_public_ip": instance_public_ip,
-                    }
-                )
+            instance_public_ip = instance.get("PublicIpAddress", "N/A")
+            instances.append(
+                {
+                    "instance_id": instance_id,
+                    "instance_type": instance_type,
+                    "instance_state": instance_state,
+                    "instance_public_ip": instance_public_ip,
+                }
+            )
 
     return instances
 
@@ -190,7 +212,7 @@ def print_instances_table(instances):
 
 
 def get_running_instance_count_by_tags(tags):
-    instances = list_instances_by_tags(tags)
+    instances = get_all_instances_by_tags(tags)
     running_instances_count = 0
 
     for instance in instances:

@@ -6,7 +6,7 @@ RESOURCE_DEFAULT_TAGS = [created_by_tag, cli_owner_tag]
 AVAILABLE_INSTANCE_TYPES = ["t3.micro", "t2.small"]
 
 AMAZON_IMAGE_NAME = "amazon"
-AMAZON_OWNER_ID = "099720109477"
+AMAZON_OWNER_ID = "amazon"
 AMAZON_LINUX_NAME_PATTERN = "al2023-ami-*-x86_64"
 
 UBUNTU_IMAGE_NAME = "ubuntu"

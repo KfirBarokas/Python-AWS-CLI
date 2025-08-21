@@ -16,6 +16,11 @@ class NoInstanceFoundById(EC2Error):
         super().__init__(f"No instance found with id: {id}")
 
 
+class InstanceNotMatchingTags(EC2Error):
+    def __init__(self, tags_to_match):
+        super().__init__(f"Instance must have tags: {tags_to_match}")
+
+
 class NoRunningInstancesError(EC2Error):
     def __init__(self):
         super().__init__(f"There are no running instances.")

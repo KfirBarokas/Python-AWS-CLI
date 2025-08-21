@@ -1,7 +1,9 @@
 import argparse
 import boto3
+import sys
 
 from ec2.commands import register_ec2_commands
+from ec2.errors import EC2Error
 
 # Use client to query data
 # ec2_client = boto3.client("ec2")
@@ -55,6 +57,7 @@ subparsers = parser.add_subparsers(
 
 
 def main():
+    sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(prog="kfir-cli")
     subparsers = parser.add_subparsers(dest="resource")
 
@@ -71,7 +74,13 @@ def main():
     # print(args.security_group_id)
 
     if hasattr(args, "func"):
-        args.func(args)
+        try:
+            args.func(args)
+        except EC2Error as e:
+            print(f"{e}")
+        # TODO: Commented out for debugging, uncomment to catch all other exceptions
+        # except Exception as e:
+        #     print(f"{e}")
     else:
         parser.print_help()
 
