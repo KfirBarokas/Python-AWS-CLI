@@ -7,10 +7,14 @@ from operator import itemgetter
 
 from common.consts import (
     AVAILABLE_IMAGES,
+    AMAZON_IMAGE_NAME,
+    UBUNTU_IMAGE_NAME,
     AVAILABLE_INSTANCE_TYPES,
     UBUNTU_NAME_PATTERN,
     AMAZON_LINUX_NAME_PATTERN,
     CANOICAL_OWNER_ID,
+    AMAZON_OWNER_ID,
+    RESOURCE_DEFAULT_TAGS,
 )
 
 # Create a single resource + client so functions can reuse them
@@ -22,12 +26,23 @@ MAX_RUNNING_INSTANCES = 2
 
 INSTANCE_STATE_RUNNING = "running"
 INSTANCE_STATE_STOPPED = "stopped"
+INSTANCE_STATE_TERMINATED = "terminated"
+
+
+def create_instance_cli(args):
+    create_instance(
+        args.ami,
+        args.type,
+        args.key_name,
+        [args.security_group_id],
+        args.subnet_id,
+        RESOURCE_DEFAULT_TAGS,
+    )
 
 
 def create_instance(
-    image_id, instance_type, key_name, sec_group_ids: list, subnet_id, tags: list = None
+    ami_name, instance_type, key_name, sec_group_ids: list, subnet_id, tags: list = None
 ):
-
     if get_running_instance_count_by_tags(tags) >= MAX_RUNNING_INSTANCES:
         raise RunningInstanceCountLimitReached(MAX_RUNNING_INSTANCES)
 
@@ -38,7 +53,7 @@ def create_instance(
     if tags:
         tag_spec = [{"ResourceType": "instance", "Tags": tags}]
 
-    client = boto3.client("ec2")
+    image_id = choose_and_get_latest_ami_id(ami_name)
 
     try:
         instances = ec2_resource.create_instances(
@@ -89,9 +104,6 @@ def stop_instance_with_tags(instance_id, tags):
     if check_instance_exists(instance_id) == False:
         raise NoInstanceFoundById(instance_id)
 
-    if get_running_instance_count_by_tags(tags) == 0:
-        raise NoRunningInstancesError
-
     if instance.state["Name"] == INSTANCE_STATE_STOPPED:
         raise InstanceAlreadyInState(INSTANCE_STATE_STOPPED)
 
@@ -101,9 +113,13 @@ def stop_instance_with_tags(instance_id, tags):
     return instance.state
 
 
-def terminate_instance(instance_id):
-    # TODO complete this
-    """Terminate an EC2 instance"""
+def terminate_instance_with_tags(instance_id, tags):
+    if check_instance_exists(instance_id) == False:
+        raise NoInstanceFoundById(instance_id)
+
+    if instance.state["Name"] == INSTANCE_STATE_TERMINATED:
+        raise InstanceAlreadyInState(INSTANCE_STATE_TERMINATED)
+
     instance = ec2_resource.Instance(instance_id)
     instance.terminate()
     instance.wait_until_terminated()
@@ -122,6 +138,10 @@ def instance_tags_match_tags(instance_tags, tags_to_match):
         if not instance_has_tag(instance_tags, tag):
             return False
     return True
+
+
+def list_instances_cli(args):
+    print_instances_table(list_instances_by_tags(RESOURCE_DEFAULT_TAGS))
 
 
 def list_instances_by_tags(tags):
@@ -184,10 +204,10 @@ def choose_and_get_latest_ami_id(image_os_name):
     if image_os_name not in AVAILABLE_IMAGES:
         raise AMITypeError(AVAILABLE_IMAGES)
 
-    if image_os_name == "amazon":
-        return get_latest_ami_id("amazon", AMAZON_LINUX_NAME_PATTERN)
+    if image_os_name == AMAZON_IMAGE_NAME:
+        return get_latest_ami_id(AMAZON_OWNER_ID, AMAZON_LINUX_NAME_PATTERN)
 
-    if image_os_name == "ubuntu":
+    if image_os_name == UBUNTU_IMAGE_NAME:
         return get_latest_ami_id(CANOICAL_OWNER_ID, UBUNTU_NAME_PATTERN)
 
 

@@ -18,8 +18,6 @@ EC2_KEY_NAME = "kfir-key"
 EC2_SECURITY_GROUP_IDS = ["sg-01a75c49e095edbef"]
 EC2_SUBNET_ID = "subnet-0468e933b4fdab115"
 
-created_by_tag = {"Key": "CreatedBy", "Value": "platform-cli"}
-cli_owner_tag = {"Key": "Owner", "Value": "kfir"}
 
 # print(
 #     create_instance(
@@ -66,16 +64,16 @@ def main():
     # register_route53_commands(subparsers)
 
     args = parser.parse_args()
-    print(args)
-    print(args.type)
-    print(args.ami)
-    print(args.key_name)
-    print(args.security_group_id)
+    # print(args)
+    # print(args.type)
+    # print(args.ami)
+    # print(args.key_name)
+    # print(args.security_group_id)
 
-    # if hasattr(args, "func"):
-    #     args.func(args)
-    # else:
-    #     parser.print_help()
+    if hasattr(args, "func"):
+        args.func(args)
+    else:
+        parser.print_help()
 
 
 if __name__ == "__main__":
