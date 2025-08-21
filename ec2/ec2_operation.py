@@ -2,7 +2,7 @@ import boto3
 from botocore.exceptions import ClientError
 
 from tabulate import tabulate
-from ec2_errors import *
+from ec2.errors import *
 from operator import itemgetter
 
 
@@ -102,6 +102,7 @@ def stop_instance_with_tags(instance_id, tags):
 
 
 def terminate_instance(instance_id):
+    # TODO complete this
     """Terminate an EC2 instance"""
     instance = ec2_resource.Instance(instance_id)
     instance.terminate()

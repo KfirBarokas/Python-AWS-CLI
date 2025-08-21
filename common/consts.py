@@ -1,0 +1,10 @@
+AVAILABLE_INSTANCE_TYPES = ["t3.micro", "t2.small"]
+AVAILABLE_IMAGES = ["amazon", "ubuntu"]
+
+CANOICAL_OWNER_ID = "099720109477"
+UBUNTU_NAME_PATTERN = "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-*-*"
+
+AMAZON_LINUX_NAME_PATTERN = "al2023-ami-*-x86_64"
+
+EC2_DEFAULT_SECURITY_GROUP_ID = "sg-01a75c49e095edbef"
+EC2_DEFAULT_SUBNET_ID = "subnet-0468e933b4fdab115"

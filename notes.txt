@@ -1,4 +1,5 @@
 user needs to install aws cli
 install boto3
 install tabulate
+install argparse ? (maybe it comes by default)
 run python venv using "source .venv/Scripts/activate"
