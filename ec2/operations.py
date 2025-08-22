@@ -131,7 +131,7 @@ def stop_instance_with_tags(instance_id, tags):
 
 
 def terminate_instance_cli(args):
-    terminate_instance_with_tags(args.instance_id)
+    terminate_instance_with_tags(args.instance_id, RESOURCE_DEFAULT_TAGS)
 
 
 def terminate_instance_with_tags(instance_id, tags):

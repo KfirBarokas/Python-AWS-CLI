@@ -5,15 +5,7 @@ import sys
 from ec2.commands import register_ec2_commands
 from ec2.errors import EC2Error
 
-# Use client to query data
-# ec2_client = boto3.client("ec2")
-# response = ec2_client.describe_instances()
 
-
-# Use resource to manipulate objects
-
-# File to hold predefined tags
-# Helper functions to operate on a resource
 EC2_IMAGE_ID = "ami-00ca32bbc84273381"
 EC2_INSTANCE_TYPE = "t3.micro"
 EC2_KEY_NAME = "kfir-key"
@@ -37,11 +29,6 @@ EC2_SUBNET_ID = "subnet-0468e933b4fdab115"
 
 # kfir-cli <resource> <action> [params]
 
-
-# ec2 parameters:
-# image [amazon,ubuntu]
-# key-name [string]
-# type [t3.micro, t2.micro]
 
 RESOURCE_EC2 = "ec2"
 RESOURCE_S3 = "s3"
@@ -87,12 +74,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-# terminate EC2
-# start EC2
-# stop EC2
-# list EC2
-
-# S3
-# s3_parser = subparsers.add_parser("s3", help="AWS S3 Bucket")
