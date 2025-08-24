@@ -6,6 +6,7 @@
 
 # list all buckets
 import os
+import sys
 from pathlib import Path
 import re
 
@@ -72,12 +73,37 @@ def create_bucket_cli(args):
     create_bucket_with_tags(args.name, RESOURCE_DEFAULT_TAGS, args.access)
 
 
+def prompt_yes_no(question, default="yes"):
+    valid = {"yes": True, "y": True, "ye": True, "no": False, "n": False}
+    if default is None:
+        prompt = " [y/n] "
+    elif default == "yes":
+        prompt = " [Y/n] "
+    elif default == "no":
+        prompt = " [y/N] "
+    else:
+        raise ValueError("invalid default answer: '%s'" % default)
+
+    while True:
+        sys.stdout.write(question + prompt)
+        choice = input().lower()
+        if default is not None and choice == "":
+            return valid[default]
+        elif choice in valid:
+            return valid[choice]
+        else:
+            sys.stdout.write("Please respond with 'yes' or 'no' " "(or 'y' or 'n').\n")
+
+
 def create_bucket_with_tags(name, tags, access):
-    print(bucket_exists(name))
     if bucket_exists(name):
         raise BucketAlreadyExists(name)
 
-    print(name)
+    if access == BUCKET_ACCESS_PUBLIC:
+        if not prompt_yes_no("Are you sure?", "yes"):
+            print("Canceled creating bucket")
+            return
+
     s3_client.create_bucket(Bucket=name)
     s3_client.put_bucket_tagging(Bucket=name, Tagging={"TagSet": tags})
 
