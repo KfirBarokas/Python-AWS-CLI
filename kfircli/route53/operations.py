@@ -9,8 +9,8 @@ from tabulate import tabulate
 import boto3
 from botocore.exceptions import ClientError
 
-from route53.errors import *
-from common.consts import (
+from kfircli.route53.errors import *
+from kfircli.common.consts import (
     ROUTE53_ZONE_TYPES,
     ROUTE53_ZONE_TYPE_PUBLIC,
     ROUTE53_ZONE_TYPE_PRIVATE,

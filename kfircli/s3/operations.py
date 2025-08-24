@@ -13,9 +13,9 @@ import re
 import boto3
 from botocore.exceptions import ClientError
 
-from common.consts import RESOURCE_DEFAULT_TAGS, BUCKET_ACCESS_PUBLIC
+from kfircli.common.consts import RESOURCE_DEFAULT_TAGS, BUCKET_ACCESS_PUBLIC
 
-from s3.errors import *
+from kfircli.s3.errors import *
 
 from tabulate import tabulate
 import json

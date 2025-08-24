@@ -1,6 +1,6 @@
-from common.consts import BUCKET_ACCESS_PUBLIC, BUCKET_ACCESS_PRIVATE
+from kfircli.common.consts import BUCKET_ACCESS_PUBLIC, BUCKET_ACCESS_PRIVATE
 
-from . import operations
+from kfircli.s3 import operations
 
 
 def register_s3_commands(subparsers):

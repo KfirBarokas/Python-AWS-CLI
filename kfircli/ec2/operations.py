@@ -2,10 +2,10 @@ import boto3
 from botocore.exceptions import ClientError
 
 from tabulate import tabulate
-from ec2.errors import *
+from kfircli.ec2.errors import *
 from operator import itemgetter
 
-from common.consts import (
+from kfircli.common.consts import (
     AVAILABLE_IMAGES,
     AMAZON_IMAGE_NAME,
     UBUNTU_IMAGE_NAME,

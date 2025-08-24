@@ -1,11 +1,11 @@
-from common.consts import (
+from kfircli.common.consts import (
     AVAILABLE_IMAGES,
     AVAILABLE_INSTANCE_TYPES,
     EC2_DEFAULT_SECURITY_GROUP_ID,
     EC2_DEFAULT_SUBNET_ID,
 )
 
-from . import operations
+from kfircli.ec2 import operations
 
 
 def register_ec2_commands(subparsers):

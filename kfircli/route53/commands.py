@@ -1,6 +1,6 @@
-from . import operations
+from kfircli.route53 import operations
 
-from common.consts import ROUTE53_ZONE_TYPE_PUBLIC, ROUTE53_ZONE_TYPES, VPC_ID
+from kfircli.common.consts import ROUTE53_ZONE_TYPE_PUBLIC, ROUTE53_ZONE_TYPES, VPC_ID
 
 
 def register_route53_commands(subparsers):

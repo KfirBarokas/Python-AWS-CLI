@@ -2,12 +2,12 @@ import argparse
 import boto3
 import sys
 
-from ec2.commands import register_ec2_commands
-from s3.commands import register_s3_commands
-from route53.commands import register_route53_commands
+from kfircli.ec2.commands import register_ec2_commands
+from kfircli.s3.commands import register_s3_commands
+from kfircli.route53.commands import register_route53_commands
 
-from ec2.errors import EC2Error
-from s3.errors import S3Error
+from kfircli.ec2.errors import EC2Error
+from kfircli.s3.errors import S3Error
 
 
 EC2_IMAGE_ID = "ami-00ca32bbc84273381"
