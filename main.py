@@ -4,8 +4,10 @@ import sys
 
 from ec2.commands import register_ec2_commands
 from s3.commands import register_s3_commands
+from route53.commands import register_route53_commands
 
 from ec2.errors import EC2Error
+from s3.errors import S3Error
 
 
 EC2_IMAGE_ID = "ami-00ca32bbc84273381"
@@ -53,7 +55,7 @@ def main():
     # Register resource subcommands
     register_ec2_commands(subparsers)
     register_s3_commands(subparsers)
-    # register_route53_commands(subparsers)
+    register_route53_commands(subparsers)
 
     args = parser.parse_args()
     # print(args)
@@ -66,6 +68,8 @@ def main():
         try:
             args.func(args)
         except EC2Error as e:
+            print(f"{e}")
+        except S3Error as e:
             print(f"{e}")
         # TODO: Commented out for debugging, uncomment to catch all other exceptions
         # except Exception as e:

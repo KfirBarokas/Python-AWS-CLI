@@ -22,6 +22,8 @@ import json
 s3_resource = boto3.resource("s3")
 s3_client = boto3.client("s3")
 
+# TODO: Add confirmation when creating public bucket
+
 
 def set_bucket_public(bucket_name):
     s3_client.put_public_access_block(
@@ -48,12 +50,22 @@ def set_bucket_public(bucket_name):
 
 
 def bucket_exists(name):
-    bucket = s3_resource.Bucket(name)
 
-    if bucket.creation_date:
-        return True
-    else:
-        return False
+    try:
+        s3_client.head_bucket(Bucket=name)
+
+    except ClientError as e:
+        error_code = e.response["Error"]["Code"]
+        if error_code == "404":  # No bucket found, meaning it doesnt exist
+            return False
+        else:
+            return True
+    finally:
+        bucket = s3_resource.Bucket(name)
+        if bucket.creation_date:
+            return True
+        else:
+            return False
 
 
 def create_bucket_cli(args):
@@ -61,6 +73,7 @@ def create_bucket_cli(args):
 
 
 def create_bucket_with_tags(name, tags, access):
+    print(bucket_exists(name))
     if bucket_exists(name):
         raise BucketAlreadyExists(name)
 

@@ -1,5 +1,5 @@
 created_by_tag = {"Key": "CreatedBy", "Value": "platform-cli"}
-cli_owner_tag = {"Key": "Owner", "Value": "kfir"}
+cli_owner_tag = {"Key": "Owner", "Value": "Kfir"}
 
 RESOURCE_DEFAULT_TAGS = [created_by_tag, cli_owner_tag]
 
@@ -18,7 +18,17 @@ AVAILABLE_IMAGES = [AMAZON_IMAGE_NAME, UBUNTU_IMAGE_NAME]
 EC2_DEFAULT_SECURITY_GROUP_ID = "sg-01a75c49e095edbef"
 EC2_DEFAULT_SUBNET_ID = "subnet-0468e933b4fdab115"
 
+VPC_REGION = "us-east-1"
+VPC_ID = "vpc-014e64327a6883f05"
 
 # S3
 BUCKET_ACCESS_PUBLIC = "public"
 BUCKET_ACCESS_PRIVATE = "private"
+
+
+# Route53
+ROUTE53_ZONE_TYPE_PUBLIC = "private"
+ROUTE53_ZONE_TYPE_PRIVATE = "public"
+ROUTE53_ZONE_TYPES = [ROUTE53_ZONE_TYPE_PUBLIC, ROUTE53_ZONE_TYPE_PRIVATE]
+
+RECORD_DEFAULT_TTL = 300
