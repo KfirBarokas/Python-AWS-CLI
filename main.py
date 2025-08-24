@@ -3,6 +3,8 @@ import boto3
 import sys
 
 from ec2.commands import register_ec2_commands
+from s3.commands import register_s3_commands
+
 from ec2.errors import EC2Error
 
 
@@ -50,7 +52,7 @@ def main():
 
     # Register resource subcommands
     register_ec2_commands(subparsers)
-    # register_s3_commands(subparsers)
+    register_s3_commands(subparsers)
     # register_route53_commands(subparsers)
 
     args = parser.parse_args()
