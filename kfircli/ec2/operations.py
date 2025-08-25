@@ -69,7 +69,8 @@ def create_instance(
     except Exception as e:
         raise InstanceCreateError(str(e))
 
-    return instances[0]  # return first instance object
+    print(f"Created instance with id: {instances[0].id}")
+    return instances[0]
 
 
 def check_instance_exists(instance_id):
@@ -112,6 +113,8 @@ def start_instance_with_tags(instance_id, tags):
 
     instance.start()
     instance.wait_until_running()
+
+    print(f"Started instance {instance_id}")
     return instance.state
 
 
@@ -127,6 +130,8 @@ def stop_instance_with_tags(instance_id, tags):
 
     instance.stop()
     instance.wait_until_stopped()
+
+    print(f"Stopped instance {instance_id}")
     return instance.state
 
 
@@ -135,6 +140,7 @@ def terminate_instance_cli(args):
 
 
 def terminate_instance_with_tags(instance_id, tags):
+
     instance = instance_exists_and_has_tags(instance_id, tags)
 
     if instance.state["Name"] == INSTANCE_STATE_TERMINATED:
@@ -142,6 +148,8 @@ def terminate_instance_with_tags(instance_id, tags):
 
     instance.terminate()
     instance.wait_until_terminated()
+
+    print(f"Terminated instance {instance_id}")
     return instance.state
 
 

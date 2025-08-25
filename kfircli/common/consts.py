@@ -1,5 +1,11 @@
+import boto3
+
+user_arn = str(boto3.client("sts").get_caller_identity().get("Arn"))
+username = user_arn.split("/")[-1]
+
 created_by_tag = {"Key": "CreatedBy", "Value": "platform-cli"}
-cli_owner_tag = {"Key": "Owner", "Value": "Kfir"}
+cli_owner_tag = {"Key": "Owner", "Value": f"{username}"}
+
 
 RESOURCE_DEFAULT_TAGS = [created_by_tag, cli_owner_tag]
 
@@ -11,7 +17,7 @@ AMAZON_LINUX_NAME_PATTERN = "al2023-ami-*-x86_64"
 
 UBUNTU_IMAGE_NAME = "ubuntu"
 CANOICAL_OWNER_ID = "099720109477"
-UBUNTU_NAME_PATTERN = "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-*-*"
+UBUNTU_NAME_PATTERN = "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-*"
 
 AVAILABLE_IMAGES = [AMAZON_IMAGE_NAME, UBUNTU_IMAGE_NAME]
 

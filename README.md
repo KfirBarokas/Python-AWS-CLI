@@ -14,8 +14,7 @@ A Python CLI that allows developers to manage AWS resources (EC2, S3, Route53).
 - [EC2 examples](#ec2-examples)
 - [S3 examples](#s3-examples)
 - [Route53 examples](#route53-examples)
-- [Tagging convention](#tagging-convention)
-- [Security & best practices](#security--best-practices)
+- [General information](#general-information)
 - [Cleanup](#cleanup-instructions)
 - [Demo](#demo-evidence-for-submission)
 
@@ -28,12 +27,30 @@ A Python CLI that allows developers to manage AWS resources (EC2, S3, Route53).
 - AWS account with an IAM user/role that has permissions for EC2, S3 and Route53.
 - AWS credentials configured locally
 
-Recommended local setup:
+Configure AWS credentials:
 
 ```bash
 aws configure # Enter credentials
 ```
+## Compatiblity
+Compatible with Windows 10 & Amazon Linux 2023
+
+MacOS - Not tested
+
 ---
+
+
+## General Information
+
+All resources created by the CLI are tagged so the tool can safely operate on its own resources.
+
+Tags:
+
+- `CreatedBy=platform-cli`
+- `Owner=<username>` (developer requesting the resource)
+
+These tags are set by default; pass `--owner`, `--project`, and `--env` when creating resources to customize them.
+
 
 ## Installation
 
@@ -199,22 +216,8 @@ python commands.py route53 list
 
 ---
 
-## Tagging convention
-
-All resources created by the CLI are tagged with a consistent schema so the tool can safely discover and operate on its own resources.
-
-Example tags applied to every resource:
-
-- `CreatedBy=platform-cli` (primary tag used for scoping)
-- `Owner=<username>` (developer requesting the resource)
-- `Project=<project-name>`
-- `Environment=<dev|staging|prod>`
-
-These tags are set by default; pass `--owner`, `--project`, and `--env` when creating resources to customize them.
 
 ## Cleanup
-
-Always confirm the AWS profile/region before running destructive commands.
 
 **EC2**
 

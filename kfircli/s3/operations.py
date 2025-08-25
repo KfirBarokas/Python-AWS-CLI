@@ -23,8 +23,6 @@ import json
 s3_resource = boto3.resource("s3")
 s3_client = boto3.client("s3")
 
-# TODO: Add confirmation when creating public bucket
-
 
 def set_bucket_public(bucket_name):
     s3_client.put_public_access_block(
@@ -109,6 +107,8 @@ def create_bucket_with_tags(name, tags, access):
 
     if access == BUCKET_ACCESS_PUBLIC:
         set_bucket_public(name)
+
+    print(f"Created bucket {name}")
 
 
 def get_bucket_name_from_arn(arn):
@@ -215,4 +215,4 @@ def upload_file_to_bucket(bucket_name, file_name, object_name):
     except ClientError as e:
         raise ErrorUploadingFileToBucket()
 
-    print("Uploaded file!")
+    print("Uploaded file")

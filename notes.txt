@@ -3,3 +3,29 @@ install boto3
 install tabulate
 install argparse ? (maybe it comes by default)
 run python venv using "source .venv/Scripts/activate"
+
+For the course DoD, include pasteable terminal output (or screenshots) that demonstrates:
+
+1. **EC2**: `create` (shows AMI resolution and instance id), `list`, `start`, `stop`.
+2. **S3**: `create` (private), `create` (public with confirmation), `upload` to a CLI-created bucket, `list`.
+3. **Route53**: `create-zone`, `record create`, and `list` showing the record.
+
+If you implemented the optional UI, include one screenshot and short steps describing how to run it.
+
+
+TODOs:
+- delete bucket and content?
+- add screenshots to docs
+- check clean install on ec2 
+- add install instructions
+
+
+
+
+
+
+Done:
+- output to user 
+- check which python version is compatible 3.10+
+- add to docs which OSs are compatible 
+- Put developer username in tags?

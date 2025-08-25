@@ -41,7 +41,7 @@ def register_route53_commands(subparsers):
     create_record.add_argument(
         "--record-value", required=True, help="Record value (IP Address for example)"
     )
-    create_zone.set_defaults(func=operations.create_record_cli)
+    create_record.set_defaults(func=operations.create_record_cli)
 
     # delete record
     delete_record = route53_subparsers.add_parser(
@@ -60,7 +60,7 @@ def register_route53_commands(subparsers):
     delete_record.add_argument(
         "--record-value", required=True, help="Record value (IP Address for example)"
     )
-    create_zone.set_defaults(func=operations.delete_record_cli)
+    delete_record.set_defaults(func=operations.delete_record_cli)
 
     # update record
     update_record = route53_subparsers.add_parser(
@@ -79,10 +79,8 @@ def register_route53_commands(subparsers):
     update_record.add_argument(
         "--record-value", required=True, help="Record value (IP Address for example)"
     )
-    create_zone.set_defaults(func=operations.update_record_cli)
+    update_record.set_defaults(func=operations.update_record_cli)
 
     # list
-    list_instances = route53_subparsers.add_parser(
-        "list", help="List zones and records"
-    )
-    list_instances.set_defaults(func=operations.list_zones_cli)
+    list_zones = route53_subparsers.add_parser("list", help="List zones and records")
+    list_zones.set_defaults(func=operations.list_zones_cli)

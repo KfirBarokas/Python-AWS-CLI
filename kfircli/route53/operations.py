@@ -97,6 +97,8 @@ def create_zone_with_tags(
     zone_id = response["HostedZone"]["Id"]
     add_tags_to_zone(RESOURCE_DEFAULT_TAGS, zone_id)
 
+    print(f"Created zone with id: {zone_id}")
+
 
 def request_create_record(zone_id, record_name, record_type, record_ttl, record_value):
     route53_client.change_resource_record_sets(
@@ -173,6 +175,8 @@ def create_record(zone_id, record_name, record_type, record_ttl, record_value):
     except ClientError as e:
         raise Route53ErrorCreatingRecord(e)  # just print the error to the screen
 
+    print(f"Created record {record_name}")
+
 
 def delete_record_cli(args):
     delete_record(
@@ -192,6 +196,8 @@ def delete_record(zone_id, record_name, record_type, record_ttl, record_value):
     except ClientError as e:
         raise Route53ErrorDeletingRecord(e)
 
+    print(f"Deleted record {record_name}")
+
 
 def update_record_cli(args):
     update_record(
@@ -210,6 +216,8 @@ def update_record(zone_id, record_name, record_type, record_ttl, record_value):
         )
     except ClientError as e:
         raise Route53ErrorUpdatingRecord(e)
+
+    print(f"Updated record {record_name}")
 
 
 def print_records_table(records):
