@@ -21,7 +21,7 @@ A Python CLI that allows developers to manage AWS resources (EC2, S3, Route53).
 ---
 
 ## Prerequisites
-
+- Git
 - Python 3.10+
 - `pip`
 - AWS account with an IAM user/role that has permissions for EC2, S3 and Route53.
@@ -57,13 +57,15 @@ These tags are set by default; pass `--owner`, `--project`, and `--env` when cre
 From the repository root:
 
 ```bash
-python -m venv .venv
-# mac / linux
-source .venv/bin/activate
-# windows
-# .venv\Scripts\activate
+# Clone this repo
+git clone https://github.com/KfirBarokas/Python-AWS-CLI.git
 
-pip install -r requirements.txt
+cd Python-AWS-CLI
+
+python3 -m pip install .
+
+# View commands
+kfircli -h
 ```
 
 ---
@@ -73,35 +75,35 @@ pip install -r requirements.txt
 The CLI format is as follows:
 
 ```bash
-python commands.py <resource> <action> [options]
+kfircli <resource> <action> [options]
 ```
 
 General pattern examples:
 
 ```bash
 # create an EC2 instance
-python commands.py ec2 create --ami ubuntu --type t3.micro --key-name my-key --subnet-id subnet-0123...
+kfircli ec2 create --ami ubuntu --type t3.micro --key-name my-key --subnet-id subnet-0123...
 
 # list instances
-python commands.py ec2 list
+kfircli ec2 list
 
 # create a private s3 bucket
-python commands.py s3 create --name my-project-dev-bucket
+kfircli s3 create --name my-project-dev-bucket
 
 # create a public s3 bucket (prompts for confirmation)
-python commands.py s3 create --name my-public-bucket --public
+kfircli s3 create --name my-public-bucket --public
 
 # create a route53 zone
-python commands.py route53 create-zone --name example.dev
+kfircli route53 create-zone --name example.dev
 ```
 
 Run `--help` on the top-level or any subcommand for more details:
 
 ```bash
-python commands.py --help
-python commands.py ec2 --help
-python commands.py s3 --help
-python commands.py route53 --help
+kfircli --help
+kfircli ec2 --help
+kfircli s3 --help
+kfircli route53 --help
 ```
 
 ---
@@ -111,7 +113,7 @@ python commands.py route53 --help
 **Create an EC2 instance**
 
 ```bash
-python commands.py ec2 create \
+kfircli ec2 create \
   --ami ubuntu \
   --type t3.micro \
   --key-name my-ssh-key \
@@ -123,25 +125,25 @@ python commands.py ec2 create \
 **Start an instance**
 
 ```bash
-python commands.py ec2 start i-0123456789abcdef0
+kfircli ec2 start i-0123456789abcdef0
 ```
 
 **Stop an instance**
 
 ```bash
-python commands.py ec2 stop i-0123456789abcdef0
+kfircli ec2 stop i-0123456789abcdef0
 ```
 
 **Terminate an instance**
 
 ```bash
-python commands.py ec2 terminate i-0123456789abcdef0
+kfircli ec2 terminate i-0123456789abcdef0
 ```
 
 **List instances created by the CLI**
 
 ```bash
-python commands.py ec2 list
+kfircli ec2 list
 ```
 
 ---
@@ -151,26 +153,26 @@ python commands.py ec2 list
 **Create a private bucket**
 
 ```bash
-python commands.py s3 create --name my-project-dev-bucket --owner alice --project demo --env dev
+kfircli s3 create --name my-project-dev-bucket --owner alice --project demo --env dev
 ```
 
 **Create a public bucket (interactive confirmation required)**
 
 ```bash
-python commands.py s3 create --name my-public-bucket --public
+kfircli s3 create --name my-public-bucket --public
 # CLI will prompt: Are you sure? (yes/no)
 ```
 
 **Upload a file to a CLI-created bucket**
 
 ```bash
-python commands.py s3 upload my-project-dev-bucket ./artifact.zip
+kfircli s3 upload my-project-dev-bucket ./artifact.zip
 ```
 
 **List CLI-created buckets**
 
 ```bash
-python commands.py s3 list
+kfircli s3 list
 ```
 
 > Upload and delete operations are allowed only for buckets the CLI created (scoped by tags).
@@ -182,13 +184,13 @@ python commands.py s3 list
 **Create a hosted zone**
 
 ```bash
-python commands.py route53 create-zone --name example.dev --owner alice
+kfircli route53 create-zone --name example.dev --owner alice
 ```
 
 **Create a record (only for CLI-created zones)**
 
 ```bash
-python commands.py route53 record create \
+kfircli route53 record create \
   --zone-id Z123456ABCDEFG \
   --name www.example.dev \
   --type A \
@@ -199,19 +201,19 @@ python commands.py route53 record create \
 **Update a record**
 
 ```bash
-python commands.py route53 record update --zone-id Z123... --name www.example.dev --type A --value 5.6.7.8
+kfircli route53 record update --zone-id Z123... --name www.example.dev --type A --value 5.6.7.8
 ```
 
 **Delete a record**
 
 ```bash
-python commands.py route53 record delete --zone-id Z123... --name www.example.dev --type A
+kfircli route53 record delete --zone-id Z123... --name www.example.dev --type A
 ```
 
 **List CLI-created zones & records**
 
 ```bash
-python commands.py route53 list
+kfircli route53 list
 ```
 
 ---
@@ -223,10 +225,10 @@ python commands.py route53 list
 
 ```bash
 # list CLI-created instances
-python commands.py ec2 list
+kfircli ec2 list
 
 # terminate an instance
-python commands.py ec2 terminate <instance-id>
+kfircli ec2 terminate <instance-id>
 ```
 
 **S3**
@@ -234,15 +236,15 @@ python commands.py ec2 terminate <instance-id>
 ```bash
 # empty bucket and delete
 aws s3 rm s3://my-bucket --recursive --profile dev
-python commands.py s3 delete --name my-bucket
+kfircli s3 delete --name my-bucket
 ```
 
 **Route53**
 
 ```bash
 # delete records then delete zone
-python commands.py route53 record delete --zone-id Z123... --name www.example.dev --type A
-python commands.py route53 delete-zone --zone-id Z123...
+kfircli route53 record delete --zone-id Z123... --name www.example.dev --type A
+kfircli route53 delete-zone --zone-id Z123...
 ```
 ---
 
