@@ -15,8 +15,8 @@ A Python CLI that allows developers to manage AWS resources (EC2, S3, Route53).
 - [S3 examples](#s3-examples)
 - [Route53 examples](#route53-examples)
 - [General information](#general-information)
-- [Cleanup](#cleanup-instructions)
-- [Demo](#demo-evidence-for-submission)
+- [Cleanup](#cleanup)
+- [Demo](#demo)
 
 ---
 
@@ -49,13 +49,8 @@ Tags:
 - `CreatedBy=platform-cli`
 - `Owner=<username>` (developer requesting the resource)
 
-These tags are set by default; pass `--owner`, `--project`, and `--env` when creating resources to customize them.
-
 
 ## Installation
-
-From the repository root:
-
 ```bash
 # Clone this repo
 git clone https://github.com/KfirBarokas/Python-AWS-CLI.git
@@ -153,13 +148,13 @@ kfircli ec2 list
 **Create a private bucket**
 
 ```bash
-kfircli s3 create --name my-project-dev-bucket --owner alice --project demo --env dev
+kfircli s3 create --name my-project-dev-bucket
 ```
 
 **Create a public bucket (interactive confirmation required)**
 
 ```bash
-kfircli s3 create --name my-public-bucket --public
+kfircli s3 create --access public
 # CLI will prompt: Are you sure? (yes/no)
 ```
 
@@ -201,13 +196,13 @@ kfircli route53 record create \
 **Update a record**
 
 ```bash
-kfircli route53 record update --zone-id Z123... --name www.example.dev --type A --value 5.6.7.8
+kfircli route53 update-record --zone-id Z123... --name www.example.dev --type A --value 5.6.7.8
 ```
 
 **Delete a record**
 
 ```bash
-kfircli route53 record delete --zone-id Z123... --name www.example.dev --type A
+kfircli route53 delete-record --zone-id Z123... --name www.example.dev --type A
 ```
 
 **List CLI-created zones & records**
@@ -231,19 +226,12 @@ kfircli ec2 list
 kfircli ec2 terminate <instance-id>
 ```
 
-**S3**
-
-```bash
-# empty bucket and delete
-aws s3 rm s3://my-bucket --recursive --profile dev
-kfircli s3 delete --name my-bucket
-```
 
 **Route53**
 
 ```bash
 # delete records then delete zone
-kfircli route53 record delete --zone-id Z123... --name www.example.dev --type A
+kfircli route53 delete-record --zone-id Z123... --name www.example.dev --type A
 kfircli route53 delete-zone --zone-id Z123...
 ```
 ---

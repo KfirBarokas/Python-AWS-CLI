@@ -7,9 +7,8 @@ For the course DoD, include pasteable terminal output (or screenshots) that demo
 
 TODOs:
 - add screenshots to docs
-- add install instructions
 - Add nice error about AWS creds
-
+- Check python version
 
 Done:
 - output to user 
@@ -17,3 +16,4 @@ Done:
 - add to docs which OSs are compatible 
 - Put developer username in tags?
 - check clean install on ec2 
+- add install instructions

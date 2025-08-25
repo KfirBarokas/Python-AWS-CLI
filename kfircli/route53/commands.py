@@ -45,7 +45,7 @@ def register_route53_commands(subparsers):
 
     # delete record
     delete_record = route53_subparsers.add_parser(
-        "create-record", help="Delete a DNS Record"
+        "delete-record", help="Delete a DNS Record"
     )
     delete_record.add_argument("--zone-id", required=True, help="Zone id")
     delete_record.add_argument("--record-name", required=True, help="Record name")
@@ -64,7 +64,7 @@ def register_route53_commands(subparsers):
 
     # update record
     update_record = route53_subparsers.add_parser(
-        "create-record", help="Update a DNS Record"
+        "update-record", help="Update a DNS Record"
     )
     update_record.add_argument("--zone-id", required=True, help="Zone id")
     update_record.add_argument("--record-name", required=True, help="Record name")
