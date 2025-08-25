@@ -1,5 +1,4 @@
 class EC2Error(Exception):
-    # Base class for EC2 related errors
     pass
 
 

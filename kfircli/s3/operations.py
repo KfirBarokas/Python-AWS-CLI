@@ -1,10 +1,3 @@
-# create - private/public
-# if public - request confirmation (yes/no)
-# add tags
-
-# upload to bucket - id, path to file
-
-# list all buckets
 import os
 import sys
 from pathlib import Path
@@ -13,7 +6,7 @@ import re
 import boto3
 from botocore.exceptions import ClientError
 
-from kfircli.common.consts import RESOURCE_DEFAULT_TAGS, BUCKET_ACCESS_PUBLIC
+from kfircli.common.consts import RESOURCE_DEFAULT_TAGS, BUCKET_ACCESS_PUBLIC, username
 
 from kfircli.s3.errors import *
 
@@ -49,22 +42,19 @@ def set_bucket_public(bucket_name):
 
 
 def bucket_exists(name):
-
     try:
         s3_client.head_bucket(Bucket=name)
-
+        return True  # bucket exists
     except ClientError as e:
         error_code = e.response["Error"]["Code"]
-        if error_code == "404":  # No bucket found, meaning it doesnt exist
+
+        if error_code in ("404", "NoSuchBucket"):
             return False
-        else:
-            return True
-    finally:
-        bucket = s3_resource.Bucket(name)
-        if bucket.creation_date:
+        elif error_code in ("403", "AccessDenied"):
+            # bucket exists but you dont have permissions
             return True
         else:
-            return False
+            raise
 
 
 def create_bucket_cli(args):
@@ -120,7 +110,7 @@ def get_buckets_with_tags():
     response = tag_client.get_resources(
         ResourceTypeFilters=["s3"],
         TagFilters=[
-            {"Key": "Owner", "Values": ["Kfir"]},
+            {"Key": "Owner", "Values": [f"{username}"]},
             {"Key": "CreatedBy", "Values": ["platform-cli"]},
         ],
     )

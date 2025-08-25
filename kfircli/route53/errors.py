@@ -1,5 +1,4 @@
 class ROUTE53Error(Exception):
-    # Base class for EC2 related errors
     pass
 
 

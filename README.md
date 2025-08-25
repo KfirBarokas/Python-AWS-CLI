@@ -49,6 +49,13 @@ Tags:
 - `CreatedBy=platform-cli`
 - `Owner=<username>` (developer requesting the resource)
 
+*When creating route53 records, record name MUST have the domain name included. example: 
+
+```bash
+# for domain mydomain.com
+kfircli route53 create-record... --record-name test # invalid
+kfircli route53 create-record... --record-name test.mydomain.com # valid
+```
 
 ## Installation
 ```bash

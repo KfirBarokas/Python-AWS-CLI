@@ -19,9 +19,14 @@ def register_route53_commands(subparsers):
         choices=ROUTE53_ZONE_TYPES,
     )
     create_zone.add_argument(
-        "--vpc-region", help="For PRIVATE, region of VPC", choices="us-east-1"
+        "--vpc-region",
+        help="For PRIVATE, region of VPC",
+        choices=["us-east-1"],
+        default="us-east-1",
     )
-    create_zone.add_argument("--vpc-id", help="For PRIVATE, ID of VPC", choices=VPC_ID)
+    create_zone.add_argument(
+        "--vpc-id", help="For PRIVATE, ID of VPC", choices=[VPC_ID], default=VPC_ID
+    )
     create_zone.set_defaults(func=operations.create_zone_cli)
 
     # create record

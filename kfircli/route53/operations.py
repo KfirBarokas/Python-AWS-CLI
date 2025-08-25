@@ -1,9 +1,3 @@
-# record:
-#   create
-#   update
-#   delete
-
-# list all zones and records of each zone
 import time
 from tabulate import tabulate
 import boto3
@@ -78,14 +72,6 @@ def create_zone_with_tags(
     if zone_type == ROUTE53_ZONE_TYPE_PUBLIC:
         response = create_public_zone(name, caller_reference)
     elif zone_type == ROUTE53_ZONE_TYPE_PRIVATE:
-
-        # both region and id are hardcoded, to make them dynamic will take some effort...
-        if vpc_region != VPC_REGION:
-            raise Route53InvalidVPCRegion(vpc_region)
-
-        if vpc_id != VPC_ID:
-            raise Route53InvalidVPCID(vpc_id)
-
         if vpc_region == None:
             raise Route53ZoneVpcRegionCannotBeNone()
 
@@ -110,7 +96,7 @@ def request_create_record(zone_id, record_name, record_type, record_ttl, record_
                     "ResourceRecordSet": {
                         "Name": record_name,
                         "Type": record_type,
-                        "TTL": record_ttl,
+                        "TTL": int(record_ttl),
                         "ResourceRecords": [{"Value": record_value}],
                     },
                 }
@@ -129,7 +115,7 @@ def request_delete_record(zone_id, record_name, record_type, record_ttl, record_
                     "ResourceRecordSet": {
                         "Name": record_name,
                         "Type": record_type,
-                        "TTL": record_ttl,
+                        "TTL": int(record_ttl),
                         "ResourceRecords": [{"Value": record_value}],
                     },
                 }
@@ -148,7 +134,7 @@ def request_update_record(zone_id, record_name, record_type, record_ttl, record_
                     "ResourceRecordSet": {
                         "Name": record_name,
                         "Type": record_type,
-                        "TTL": record_ttl,
+                        "TTL": int(record_ttl),
                         "ResourceRecords": [{"Value": record_value}],
                     },
                 }
@@ -310,7 +296,7 @@ def print_zones_with_tags():
     for zone in zones:
         records = get_records(zone["Id"])
 
-        print(f"Records for ZONE: {zone['Name']}, ID: {zone['Id']}")
+        print(f"Records for ZONE: {zone['Name']} ID: {zone['Id']}")
         print_records_table(records)
         print("")
         print("")
