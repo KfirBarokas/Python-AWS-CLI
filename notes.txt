@@ -14,13 +14,9 @@ If you implemented the optional UI, include one screenshot and short steps descr
 
 
 TODOs:
-- delete bucket and content?
 - add screenshots to docs
 - check clean install on ec2 
 - add install instructions
-
-
-
 
 
 
